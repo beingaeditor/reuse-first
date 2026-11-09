@@ -19,6 +19,8 @@ EXT_LANG = {".py": "Python", ".ts": "TypeScript", ".tsx": "TypeScript", ".js": "
             ".vue": "Vue", ".svelte": "Svelte", ".dart": "Dart"}
 
 FRAMEWORKS = {"react": "React", "next": "Next.js", "vue": "Vue", "svelte": "Svelte",
+              "astro": "Astro", "@sveltejs/kit": "SvelteKit", "nuxt": "Nuxt",
+              "@remix-run/react": "Remix",
               "@angular/core": "Angular", "express": "Express", "fastify": "Fastify",
               "@nestjs/core": "NestJS", "electron": "Electron", "vite": "Vite",
               "tailwindcss": "Tailwind", "prisma": "Prisma", "fastapi": "FastAPI",
