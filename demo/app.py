@@ -2,8 +2,10 @@
 
     pip install -r server/requirements.txt fastapi uvicorn
     python demo/app.py      # http://localhost:8765
+    HOST=0.0.0.0 PORT=10000 python demo/app.py   # on a hosting service
 """
 import io
+import os
 import secrets
 import sys
 import tempfile
@@ -87,4 +89,5 @@ def api_download(token: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8765)
+    # hosting services set HOST=0.0.0.0 and PORT; locally it stays private on 127.0.0.1:8765
+    uvicorn.run(app, host=os.getenv("HOST", "127.0.0.1"), port=int(os.getenv("PORT", "8765")))
