@@ -7,6 +7,7 @@
 import argparse
 import json
 import sys
+import urllib.error
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -38,6 +39,12 @@ def main(argv: list[str] | None = None) -> None:
             result = core.scaffold_project(a.repo, a.name, a.idea, a.dir)
     except GitHubError as e:
         print(f"error: {e}", file=sys.stderr)
+        sys.exit(2)
+    except (urllib.error.URLError, TimeoutError):
+        print(
+            "error: could not reach GitHub (check your internet connection)",
+            file=sys.stderr,
+        )
         sys.exit(2)
     # ASCII-escaped JSON: a Windows console can't encode every character repos use
     print(json.dumps(result, indent=2))
