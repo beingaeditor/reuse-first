@@ -18,7 +18,15 @@ git clone https://github.com/beingaeditor/reuse-first && pip install -r reuse-fi
 pip install -r server/requirements.txt
 ```
 
-Optional: set `GITHUB_TOKEN` to a GitHub token (no scopes needed). Without it GitHub allows about 60 requests an hour and 10 searches a minute. One search plus one blueprint uses about 7.
+Optional: set `GITHUB_TOKEN` to a [GitHub personal access token](https://github.com/settings/personal-access-tokens/new). No scopes are needed. Without a token GitHub allows about 60 requests an hour and 10 searches a minute. One search plus one blueprint uses about 7.
+
+Set it in your shell before running reuse-first:
+
+| Shell | Command |
+| --- | --- |
+| bash / zsh (macOS, Linux) | `export GITHUB_TOKEN="YOUR_TOKEN"` |
+| PowerShell (Windows) | `$env:GITHUB_TOKEN = "YOUR_TOKEN"` |
+| Command Prompt (Windows) | `set GITHUB_TOKEN=YOUR_TOKEN` |
 
 ## Try the web demo
 
