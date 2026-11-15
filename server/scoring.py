@@ -9,6 +9,7 @@ from math import log10
 
 PERMISSIVE = {"MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "Unlicense", "0BSD"}
 WEAK_COPYLEFT = {"MPL-2.0", "LGPL-3.0", "LGPL-2.1", "EPL-2.0"}
+STRONG_COPYLEFT = {"GPL-2.0", "GPL-3.0", "AGPL-3.0"}
 WEIGHTS = {"recency": 0.35, "adoption": 0.25, "issue_load": 0.15, "fit": 0.25}
 
 
@@ -25,7 +26,9 @@ def license_gate(spdx: str | None, allow_copyleft: bool = False) -> tuple[bool, 
         return allow_copyleft, "weak copyleft"
     if spdx in (None, "NOASSERTION"):
         return False, "no detectable license (all rights reserved by default)"
-    return allow_copyleft, f"restrictive or unreviewed license {spdx}"
+    if spdx in STRONG_COPYLEFT:
+        return allow_copyleft, f"strong copyleft ({spdx}): derived work must use the same license"
+    return allow_copyleft, f"unreviewed license {spdx}: check its terms"
 
 
 def keyword_fit(repo: dict, query: str) -> float | None:

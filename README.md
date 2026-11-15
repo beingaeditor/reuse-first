@@ -77,7 +77,7 @@ python tests/e2e_live.py "self-hosted url shortener"
 ## Limits
 
 - Ranking is a heuristic (recency, stars, issue load, keyword fit), not a quality guarantee.
-- License notes are informational, not legal advice. Unlicensed and copyleft repos are excluded unless you allow copyleft.
+- License notes are informational, not legal advice. Unlicensed and archived repos are always excluded, copyleft ones unless you allow copyleft; the best few excluded repos are still listed after the others, with the reason.
 - The scaffold reuses structure and dependency names only, never source code.
 
 ## Contributing

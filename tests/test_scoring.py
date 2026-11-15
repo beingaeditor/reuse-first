@@ -106,3 +106,22 @@ def test_rate_limited_snapshot_raises_and_is_not_cached(tmp_path, monkeypatch):
         snapshot("o/r", cache)  # repo details load, then the file list hits the limit
     assert e.value.status == 403
     assert cache.get("snap:o/r", allow_stale=True) == (None, None)
+
+
+def test_license_notes_name_the_kind():
+    from scoring import license_gate
+    assert license_gate("AGPL-3.0") == (False, "strong copyleft (AGPL-3.0): derived work must use the same license")
+    assert license_gate("GPL-3.0", allow_copyleft=True)[0] is True
+    assert license_gate("CC-BY-4.0")[1].startswith("unreviewed license CC-BY-4.0")
+
+
+def test_find_lists_excluded_repos_after_the_eligible_ones(monkeypatch):
+    import core
+    mit = [repo(full_name=f"o/mit{i}", stars=100 - i) for i in range(8)]
+    agpl = [repo(full_name=f"o/agpl{i}", stars=99999, license="AGPL-3.0") for i in range(4)]
+    monkeypatch.setattr(core, "search_repos", lambda q, c, n: mit + agpl)
+    out = core.find("pdf table", limit=5)
+    assert [bool(r["excluded"]) for r in out] == [False] * 5 + [True] * 3
+    assert "strong copyleft" in out[-1]["excluded"][0]
+    allowed = core.find("pdf table", limit=5, allow_copyleft=True)
+    assert len(allowed) == 5 and not any(r["excluded"] for r in allowed)

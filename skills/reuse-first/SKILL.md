@@ -10,8 +10,8 @@ Before writing code for a new project, look for prior art.
 ## Workflow
 
 1. **Pin down the need.** From the user's description, write a one-line problem statement and 3–5 must-have capabilities. Ask at most one question if the goal is unclear.
-2. **Discover.** Call `find_repos` 2–3 times with differently worded queries (by problem, by technique, by stack). Merge results.
-3. **Shortlist 3–5.** Prefer: high `score`, adequate `confidence`, empty `excluded`. Never recommend an excluded repo as a base to copy (no license = all rights reserved). Mention if the best-fitting repo is excluded and why.
+2. **Discover.** Call `find_repos` 2–3 times with different wordings of 2–4 words each, the way a repo would describe itself: "bookmark manager", "read later app". GitHub requires every word to match, so long phrases return tiny repos or nothing. Merge results.
+3. **Shortlist 3–5.** Prefer high `score` and empty `excluded`. (`confidence` is almost always 1.0 here; below 1 means GitHub lacked some data.) Never recommend an excluded repo as a base to copy (no license = all rights reserved). The excluded repos at the end of `find_repos`'s list are there so you can mention when one fits better than your shortlist, and why. A copyleft license may still suit a team that only runs the software internally; it can be included with `allow_copyleft` (not legal advice).
 4. **Study architecture.** Call `blueprint` on the top 2–3. Summarise for each: stack, layers, entrypoints, what is reusable, what is missing versus the must-haves.
 5. **Present a short comparison and a recommendation** (table: repo, license, last push, fit, gaps). State that star counts and scores are heuristics, and license notes are not legal advice. Let the user choose before building.
 6. **Scaffold.** Call `scaffold_project` with the chosen repo, a project name, the idea, and `output_dir` set to where the user wants the project (default: current folder). It creates layer folders, dependency manifests, `ARCHITECTURE.md` with a build plan, and `ATTRIBUTIONS.md`.

@@ -31,8 +31,11 @@ async def get_blueprint(full_name: str) -> dict:
 @mcp.tool()
 async def find_repos(query: str, limit: int = 10, allow_copyleft: bool = False) -> list[dict]:
     """Search GitHub for existing projects matching a description and rank them by
-    health, adoption and fit. Repos with no/unsuitable license or archived are marked
-    in `excluded` and listed last. `score` is 0..1; `confidence` is how much data backed it."""
+    recency, adoption, open-issue load and keyword fit. Returns up to `limit` eligible repos,
+    then up to 3 excluded ones (no or unsuitable license, archived) with the reason in
+    `excluded`. `score` is 0..1. `confidence` is below 1 only when GitHub lacked some data.
+    Use 2-4 word queries ("bookmark manager"): every word must match a repo's name,
+    description or topics."""
     return await find(query, limit, allow_copyleft)
 
 

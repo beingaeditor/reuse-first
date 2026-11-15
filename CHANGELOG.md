@@ -7,6 +7,9 @@ Fixes:
 - A blueprint fetched while GitHub's rate limit ran out is no longer cached for 6 hours with no files; you get the rate-limit message instead.
 - Scaffolding refuses a project folder that already exists and is not empty, instead of overwriting your files.
 - `server.py --http` listens on 127.0.0.1 unless `HOST` is set, and turns off `scaffold_project`, so other machines can't write files on yours.
+- Excluded repos (no or copyleft license, archived) are no longer cut off by the result limit: the best 3 follow the eligible ones with their reason, so the skill can say when a better fit was left out.
+- GPL and AGPL are labelled "strong copyleft" instead of "restrictive or unreviewed license".
+- The skill and tool description say to search with 2-4 words, and no longer ask Claude to weigh `confidence`, which is almost always 1.0.
 
 ## v0.1.0 (2026-11-10)
 
