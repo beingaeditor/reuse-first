@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+Fixes:
+
+- A blueprint fetched while GitHub's rate limit ran out is no longer cached for 6 hours with no files; you get the rate-limit message instead.
+- Scaffolding refuses a project folder that already exists and is not empty, instead of overwriting your files.
+- `server.py --http` listens on 127.0.0.1 unless `HOST` is set, and turns off `scaffold_project`, so other machines can't write files on yours.
+
 ## v0.1.0 (2026-11-10)
 
 First release.

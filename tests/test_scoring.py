@@ -94,3 +94,15 @@ def test_search_error_raises(tmp_path, monkeypatch):
 def test_rate_limit_message_with_token_says_wait(monkeypatch):
     monkeypatch.setenv("GITHUB_TOKEN", "x")
     assert "wait a minute" in str(GitHubError(429, "/search/repositories"))
+
+
+def test_rate_limited_snapshot_raises_and_is_not_cached(tmp_path, monkeypatch):
+    from architecture import snapshot
+    limited = lambda: urllib.error.HTTPError("u", 403, "Forbidden", {}, None)  # noqa: E731
+    repo_body = json.dumps({"default_branch": "main", "html_url": "h"}).encode()
+    monkeypatch.setattr(github, "_open", fake_open([FakeResp(repo_body), limited(), limited()], []))
+    cache = Cache(str(tmp_path / "c.db"))
+    with pytest.raises(GitHubError) as e:
+        snapshot("o/r", cache)  # repo details load, then the file list hits the limit
+    assert e.value.status == 403
+    assert cache.get("snap:o/r", allow_stale=True) == (None, None)

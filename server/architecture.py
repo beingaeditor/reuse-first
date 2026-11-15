@@ -75,10 +75,15 @@ def snapshot(full_name: str, cache: Cache) -> dict:
     manifests: dict[str, str] = {}
     wanted = [p for p in paths if p.split("/")[-1] in MANIFESTS and p.count("/") <= 2]
     wanted.sort(key=lambda p: p.count("/"))
+    statuses = [ts, rs]
     for p in wanted[:5]:
         ms, m, _ = get(f"/repos/{full_name}/contents/{p}", timeout=25)
+        statuses.append(ms)
         if ms == 200 and m.get("encoding") == "base64":
             manifests[p] = _b64(m, 8000)
+    # a repo half-fetched under a rate limit must not be cached as if it had no files
+    if limited := [s for s in statuses if s in (403, 429)]:
+        raise GitHubError(limited[0], f"/repos/{full_name}")
     snap = {
         "full_name": full_name, "url": repo.get("html_url"),
         "description": repo.get("description"), "stars": repo.get("stargazers_count"),
@@ -211,6 +216,9 @@ def _slug(s: str) -> str:
 def scaffold(bp: dict, project_name: str, idea: str, out_dir: Path) -> list[str]:
     """Write a starter project shaped like the blueprint. Returns created relative paths."""
     root = out_dir / _slug(project_name)
+    if root.is_dir() and any(root.iterdir()):
+        raise FileExistsError(f"{root} already exists and is not empty; "
+                              "pick another project name or folder (nothing was changed).")
     root.mkdir(parents=True, exist_ok=True)
     created: list[str] = []
 

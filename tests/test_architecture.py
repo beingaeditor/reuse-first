@@ -72,3 +72,14 @@ def test_blueprint_and_scaffold(tmp_path):
     assert "web/package.json" in files
     assert '"react"' in (root / "web/package.json").read_text()
     assert "react" not in (root / "pyproject.toml").read_text()
+
+
+def test_scaffold_refuses_non_empty_folder(tmp_path):
+    import pytest
+    bp = make_blueprint(SNAP)
+    (tmp_path / "pay-hub").mkdir()
+    scaffold(bp, "Pay Hub", "x", tmp_path)  # an empty existing folder is fine
+    (tmp_path / "pay-hub" / "README.md").write_text("MY OWN NOTES")
+    with pytest.raises(FileExistsError):
+        scaffold(bp, "Pay Hub", "x", tmp_path)
+    assert (tmp_path / "pay-hub" / "README.md").read_text() == "MY OWN NOTES"

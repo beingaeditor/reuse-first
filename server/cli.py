@@ -36,7 +36,7 @@ def main(argv: list[str] | None = None) -> None:
             result = core.blueprint(a.repo)
         else:
             result = core.scaffold_project(a.repo, a.name, a.idea, a.dir)
-    except GitHubError as e:
+    except (GitHubError, FileExistsError) as e:
         print(f"error: {e}", file=sys.stderr)
         sys.exit(2)
     # ASCII-escaped JSON: a Windows console can't encode every character repos use

@@ -65,7 +65,7 @@ ChatGPT only accepts remote MCP servers (Settings, Apps & Connectors, Developer 
 python server/server.py --http
 ```
 
-Expose it at a public HTTPS URL (Render, Fly.io, or `ngrok http 8000` for testing), add `https://your-host/mcp` as a connector, and paste SKILL.md into custom instructions. Add authentication before leaving it public. Note that on a remote server, `scaffold_project` writes files on that server, not on your PC.
+It listens on `127.0.0.1:8000` only, so nothing else on your network can reach it. Expose it at a public HTTPS URL (`ngrok http 8000` for testing, or a host such as Render or Fly.io with `HOST=0.0.0.0`), add `https://your-host/mcp` as a connector, and paste SKILL.md into custom instructions. Add authentication before leaving it public. In this mode `scaffold_project` is turned off, because it would write files on the server, not on your PC; use `blueprint` instead.
 
 ## Verify
 

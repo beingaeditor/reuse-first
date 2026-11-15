@@ -42,3 +42,12 @@ def test_missing_command_exits_with_usage():
     with pytest.raises(SystemExit) as e:
         cli.main([])
     assert e.value.code == 2
+
+
+def test_existing_folder_prints_one_line_and_exits_2(monkeypatch, capsys):
+    def exists(*a):
+        raise FileExistsError("out/my-app already exists and is not empty")
+    monkeypatch.setattr(core, "scaffold_project", exists)
+    with pytest.raises(SystemExit) as e:
+        cli.main(["scaffold", "o/r", "My App", "idea"])
+    assert e.value.code == 2 and capsys.readouterr().err.startswith("error: out/my-app")
